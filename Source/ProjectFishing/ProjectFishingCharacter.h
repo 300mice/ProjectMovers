@@ -5,8 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
+#include "Abilities/AbilitySet.h"
 #include "ProjectFishingCharacter.generated.h"
 
+class UAbilitySet;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -30,6 +34,9 @@ class AProjectFishingCharacter : public ACharacter
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	UAbilitySystemComponent* AbiliySystemComponent;
 
 protected:
 
@@ -80,6 +87,8 @@ protected:
 
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+
+	virtual void BeginPlay() override;
 	
 
 public:
@@ -89,6 +98,14 @@ public:
 
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Abilities")
+	TObjectPtr<UAbilitySet> StartingAbilities;
+
+private:
+	FAbilitySet_GrantedHandles* AbilityHandles;
 
 };
 

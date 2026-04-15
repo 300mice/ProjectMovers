@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "ProjectFishing.h"
+#include "Abilities/AbilitySet.h"
 
 AProjectFishingCharacter::AProjectFishingCharacter()
 {
@@ -42,6 +43,11 @@ AProjectFishingCharacter::AProjectFishingCharacter()
 	// Configure character movement
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 	GetCharacterMovement()->AirControl = 0.5f;
+
+	//Configure Ability System Component
+	AbiliySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>("ASC");
+	AbiliySystemComponent->SetIsReplicated(true);
+	AbiliySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 }
 
 void AProjectFishingCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -63,6 +69,16 @@ void AProjectFishingCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	else
 	{
 		UE_LOG(LogProjectFishing, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+void AProjectFishingCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	AbiliySystemComponent->InitAbilityActorInfo(this, this);
+	if(StartingAbilities)
+	{
+		StartingAbilities->GiveToAbilitySystem(AbiliySystemComponent, AbilityHandles);
 	}
 }
 
