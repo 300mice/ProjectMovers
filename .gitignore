@@ -1,6 +1,8 @@
-# IDE config folders
+# IDE config 
 .vs/
+.vsconfig
 .idea/
+Plugins/Developer/RiderLink/
 
 # Compiled Object files
 *.slo
