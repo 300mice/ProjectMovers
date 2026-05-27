@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DownDog.h"
+#include "AbilitySystem/AbilitySet.h"
 
 ADownDogCharacter::ADownDogCharacter()
 {
@@ -127,4 +128,8 @@ void ADownDogCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	ASC->InitAbilityActorInfo(GetOwner(), this);
+	if(StartingAbilities)
+	{
+		StartingAbilities->GiveToAbilitySystem(ASC, AbilityHandles);
+	}
 }

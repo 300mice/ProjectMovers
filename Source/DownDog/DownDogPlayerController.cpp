@@ -8,6 +8,8 @@
 #include "DownDogCameraManager.h"
 #include "Blueprint/UserWidget.h"
 #include "DownDog.h"
+#include "DownDogCharacter.h"
+#include "Input/ModularInputComponent.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
 ADownDogPlayerController::ADownDogPlayerController()
@@ -65,6 +67,16 @@ void ADownDogPlayerController::SetupInputComponent()
 				}
 			}
 		}
+
+		if(InputConfig)
+		{
+			UModularInputComponent* ModularInputComponent = Cast<UModularInputComponent>(InputComponent);
+			check(ModularInputComponent);
+			for(FTaggedInputAction TaggedAction : InputConfig->TaggedInputActions)
+			{
+				ModularInputComponent->BindActionByTag(InputConfig, TaggedAction.InputTag, TaggedAction.TriggerEvent, this, &ADownDogPlayerController::TriggerAbility, TaggedAction.InputTag);
+			}
+		}
 	}
 	
 }
@@ -73,4 +85,25 @@ bool ADownDogPlayerController::ShouldUseTouchControls() const
 {
 	// are we on a mobile platform? Should we force touch?
 	return SVirtualJoystick::ShouldDisplayTouchInterface() || bForceTouchControls;
+}
+
+void ADownDogPlayerController::TriggerAbility(FGameplayTag InputTag)
+{
+	ADownDogCharacter* DownDogCharacter = Cast<ADownDogCharacter>(GetPawn());
+	if(DownDogCharacter)
+	{
+		TArray<FGameplayAbilitySpecHandle> Handles;
+		DownDogCharacter->ASC->GetAllAbilities(Handles);
+		for(FGameplayAbilitySpecHandle& AbilitySpecHandle : Handles)
+		{
+			FGameplayAbilitySpec* AbilitySpec = DownDogCharacter->ASC->FindAbilitySpecFromHandle(AbilitySpecHandle);
+			FGameplayTagContainer AbilityHandles = AbilitySpec->GetDynamicSpecSourceTags();
+			FGameplayTagContainer TagContainer;
+			TagContainer.AddTag(InputTag);
+			if(AbilityHandles.HasTag(InputTag))
+			{
+				DownDogCharacter->ASC->TryActivateAbility(AbilitySpecHandle);
+			}
+		}
+	}
 }

@@ -9,6 +9,8 @@
 #include "Logging/LogMacros.h"
 #include "DownDogCharacter.generated.h"
 
+struct FAbilitySet_GrantedHandles;
+class UAbilitySet;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -98,6 +100,11 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	UAbilitySystemComponent* ASC;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Abilities")
+	TObjectPtr<UAbilitySet> StartingAbilities;
+
+	FAbilitySet_GrantedHandles* AbilityHandles;
 
 };
 

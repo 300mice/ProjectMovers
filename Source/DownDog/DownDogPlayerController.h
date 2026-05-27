@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "DownDogPlayerController.generated.h"
 
+struct FGameplayTag;
+class UInputConfig;
 class UInputMappingContext;
 class UUserWidget;
 
@@ -54,4 +56,10 @@ protected:
 
 	/** Returns true if the player should use UMG touch controls */
 	bool ShouldUseTouchControls() const;
+
+protected:
+	void TriggerAbility(FGameplayTag InputTag);
+
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	UInputConfig* InputConfig;
 };
