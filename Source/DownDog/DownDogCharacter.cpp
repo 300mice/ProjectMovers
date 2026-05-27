@@ -127,7 +127,7 @@ void ADownDogCharacter::DoJumpEnd()
 void ADownDogCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	ASC->InitAbilityActorInfo(GetOwner(), this);
+	ASC->InitAbilityActorInfo(this, this);
 	if(StartingAbilities)
 	{
 		StartingAbilities->GiveToAbilitySystem(ASC, AbilityHandles);
