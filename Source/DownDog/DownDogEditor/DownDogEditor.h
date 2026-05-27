@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettingsBackedByCVars.h"
-#include "UObject/Object.h"
 #include "DownDogEditor.generated.h"
 
 /**
  * 
  */
 
-#if WITH_EDITOR
+
 UCLASS(config=EditorPerProjectUserSettings)
 class DOWNDOG_API UDownDogEditor : public UDeveloperSettingsBackedByCVars
 {
@@ -45,5 +44,3 @@ class DOWNDOG_API UDownDogEditor : public UDeveloperSettingsBackedByCVars
     	virtual void PostInitProperties() override;
     #endif
 };
-
-#endif

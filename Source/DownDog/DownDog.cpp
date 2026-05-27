@@ -1,11 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "DownDog.h"
+#include "Modules/ModuleManager.h"
 
+#if WITH_EDITOR
 #include "UnrealEdGlobals.h"
 #include "Editor/UnrealEdEngine.h"
 #include "DownDogEditor/DownDogEditor.h"
-#include "Modules/ModuleManager.h"
 
 class SWidget;
 
@@ -88,10 +89,12 @@ static void RegisterGameEditorMenus()
 	Section.AddEntry(CommonMapEntry);
 }
 
+#endif
+
 class FDownDogEditorModule : public FDefaultGameModuleImpl
 {
 	typedef FDownDogEditorModule ThisClass;
-
+#if WITH_EDITOR
 	virtual void StartupModule() override
 	{
 		if (!IsRunningGame())
@@ -103,9 +106,14 @@ class FDownDogEditorModule : public FDefaultGameModuleImpl
 		}
 	}
 	FDelegateHandle ToolMenusHandle;
+#endif
+	
 };
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDownDogEditorModule, DownDog, "DownDog" );
 DEFINE_LOG_CATEGORY(LogDownDog);
 
+
+#if WITH_EDITOR
 #undef LOCTEXT_NAMESPACE
+#endif

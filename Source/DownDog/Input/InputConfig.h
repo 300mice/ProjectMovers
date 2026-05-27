@@ -26,9 +26,6 @@ public:
  
 	UPROPERTY(EditDefaultsOnly, Meta = (Categories = "Input"))
 	FGameplayTag InputTag;
-
-	UPROPERTY(EditDefaultsOnly, Meta = (Categories = "Input"))
-	ETriggerEvent TriggerEvent;
 };
 
 UCLASS()

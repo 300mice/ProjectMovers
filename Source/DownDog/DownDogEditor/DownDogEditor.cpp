@@ -3,7 +3,7 @@
 
 #include "DownDogEditor.h"
 
-#if WITH_EDITOR
+
 UDownDogEditor::UDownDogEditor()
 {
 }
@@ -13,6 +13,7 @@ FName UDownDogEditor::GetCategoryName() const
 	return FApp::GetProjectName();
 }
 
+#if WITH_EDITOR
 void UDownDogEditor::ApplySettings()
 {
 }
