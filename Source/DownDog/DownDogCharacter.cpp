@@ -42,6 +42,10 @@ ADownDogCharacter::ADownDogCharacter()
 	// Configure character movement
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 	GetCharacterMovement()->AirControl = 0.5f;
+
+	ASC = CreateDefaultSubobject<UAbilitySystemComponent>("ASC");
+	ASC->SetIsReplicated(true);
+	ASC->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 }
 
 void ADownDogCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -117,4 +121,10 @@ void ADownDogCharacter::DoJumpEnd()
 {
 	// pass StopJumping to the character
 	StopJumping();
+}
+
+void ADownDogCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	ASC->InitAbilityActorInfo(GetOwner(), this);
 }

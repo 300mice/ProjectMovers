@@ -20,6 +20,8 @@ public class DownDog : ModuleRules
 			"UMG",
 			"Slate",
 			"DeveloperSettings",
+			"GameplayAbilities",
+			"GameplayTasks"
 		});
 		if (Target.bBuildEditor)
 		{

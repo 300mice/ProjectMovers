@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "DownDogCharacter.generated.h"
@@ -76,6 +78,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
+	virtual void BeginPlay() override;
+
 protected:
 
 	/** Set up input action bindings */
@@ -89,6 +93,11 @@ public:
 
 	/** Returns first person camera component **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	// Extra Components
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	UAbilitySystemComponent* ASC;
 
 };
 
