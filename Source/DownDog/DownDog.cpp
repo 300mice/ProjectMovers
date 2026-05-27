@@ -2,10 +2,8 @@
 
 #include "DownDog.h"
 
-#if WITH_EDITOR
 #include "UnrealEdGlobals.h"
 #include "Editor/UnrealEdEngine.h"
-#endif
 #include "DownDogEditor/DownDogEditor.h"
 #include "Modules/ModuleManager.h"
 
