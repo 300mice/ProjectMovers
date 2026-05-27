@@ -58,7 +58,8 @@ protected:
 	bool ShouldUseTouchControls() const;
 
 protected:
-	void TriggerAbility(FGameplayTag InputTag);
+	void Input_AbilityInputTagPressed(FGameplayTag InputTag);
+	void Input_AbilityInputTagReleased(FGameplayTag InputTag);
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	UInputConfig* InputConfig;

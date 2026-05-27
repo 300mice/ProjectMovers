@@ -68,13 +68,26 @@ void ADownDogPlayerController::SetupInputComponent()
 			}
 		}
 
-		if(InputConfig)
+		if (InputConfig)
 		{
 			UModularInputComponent* ModularInputComponent = Cast<UModularInputComponent>(InputComponent);
 			check(ModularInputComponent);
-			for(FTaggedInputAction TaggedAction : InputConfig->TaggedInputActions)
+
+			for (FTaggedInputAction& TaggedAction : InputConfig->TaggedInputActions)
 			{
-				ModularInputComponent->BindActionByTag(InputConfig, TaggedAction.InputTag, TaggedAction.TriggerEvent, this, &ADownDogPlayerController::TriggerAbility, TaggedAction.InputTag);
+				// Bind press
+				ModularInputComponent->BindActionByTag(
+					InputConfig, TaggedAction.InputTag,
+					ETriggerEvent::Started,
+					this, &ADownDogPlayerController::Input_AbilityInputTagPressed,
+					TaggedAction.InputTag);
+
+				// Bind release
+				ModularInputComponent->BindActionByTag(
+					InputConfig, TaggedAction.InputTag,
+					ETriggerEvent::Completed,
+					this, &ADownDogPlayerController::Input_AbilityInputTagReleased,
+					TaggedAction.InputTag);
 			}
 		}
 	}
@@ -87,23 +100,44 @@ bool ADownDogPlayerController::ShouldUseTouchControls() const
 	return SVirtualJoystick::ShouldDisplayTouchInterface() || bForceTouchControls;
 }
 
-void ADownDogPlayerController::TriggerAbility(FGameplayTag InputTag)
+void ADownDogPlayerController::Input_AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	ADownDogCharacter* DownDogCharacter = Cast<ADownDogCharacter>(GetPawn());
-	if(DownDogCharacter)
+	if (!DownDogCharacter || !DownDogCharacter->ASC) return;
+
+	TArray<FGameplayAbilitySpecHandle> Handles;
+	DownDogCharacter->ASC->GetAllAbilities(Handles);
+
+	for (FGameplayAbilitySpecHandle& Handle : Handles)
 	{
-		TArray<FGameplayAbilitySpecHandle> Handles;
-		DownDogCharacter->ASC->GetAllAbilities(Handles);
-		for(FGameplayAbilitySpecHandle& AbilitySpecHandle : Handles)
+		FGameplayAbilitySpec* Spec = DownDogCharacter->ASC->FindAbilitySpecFromHandle(Handle);
+		if (!Spec) continue;
+
+		if (Spec->GetDynamicSpecSourceTags().HasTag(InputTag))
 		{
-			FGameplayAbilitySpec* AbilitySpec = DownDogCharacter->ASC->FindAbilitySpecFromHandle(AbilitySpecHandle);
-			FGameplayTagContainer AbilityHandles = AbilitySpec->GetDynamicSpecSourceTags();
-			FGameplayTagContainer TagContainer;
-			TagContainer.AddTag(InputTag);
-			if(AbilityHandles.HasTag(InputTag))
-			{
-				DownDogCharacter->ASC->TryActivateAbility(AbilitySpecHandle);
-			}
+			// This sets Spec->InputPressed = true AND fires InputPressed replication event
+			DownDogCharacter->ASC->AbilityLocalInputPressed(Spec->InputID);
+		}
+	}
+}
+
+void ADownDogPlayerController::Input_AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	ADownDogCharacter* DownDogCharacter = Cast<ADownDogCharacter>(GetPawn());
+	if (!DownDogCharacter || !DownDogCharacter->ASC) return;
+
+	TArray<FGameplayAbilitySpecHandle> Handles;
+	DownDogCharacter->ASC->GetAllAbilities(Handles);
+
+	for (FGameplayAbilitySpecHandle& Handle : Handles)
+	{
+		FGameplayAbilitySpec* Spec = DownDogCharacter->ASC->FindAbilitySpecFromHandle(Handle);
+		if (!Spec) continue;
+
+		if (Spec->GetDynamicSpecSourceTags().HasTag(InputTag))
+		{
+			// This sets Spec->InputPressed = false AND fires InputReleased replication event
+			DownDogCharacter->ASC->AbilityLocalInputReleased(Spec->InputID);
 		}
 	}
 }
