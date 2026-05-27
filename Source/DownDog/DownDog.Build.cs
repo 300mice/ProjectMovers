@@ -21,7 +21,8 @@ public class DownDog : ModuleRules
 			"Slate",
 			"DeveloperSettings",
 			"GameplayAbilities",
-			"GameplayTasks"
+			"GameplayTasks",
+			"GameplayTags"
 		});
 		if (Target.bBuildEditor)
 		{
