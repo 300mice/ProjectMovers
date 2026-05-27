@@ -18,10 +18,33 @@ public class DownDog : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate",
+			"DeveloperSettings",
 		});
+		if (Target.bBuildEditor)
+		{
+			PublicDependencyModuleNames.AddRange(new string[]
+			{
+				"UnrealEd",
+				"EditorFramework",
+				"ToolMenus",
+				"EditorStyle",
+			});
+		}
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"InputCore",
+			"Slate",
+			"SlateCore",
+			"DataValidation",
+			"MessageLog",
+			"Projects",
+			"DeveloperToolSettings",
+			"CollectionManager",
+			"SourceControl",
+			"Chaos"
+		});
 
 		PublicIncludePaths.AddRange(new string[] {
 			"DownDog",
@@ -32,6 +55,16 @@ public class DownDog : ModuleRules
 			"DownDog/Variant_Shooter/UI",
 			"DownDog/Variant_Shooter/Weapons"
 		});
+		if (Target.bBuildEditor)
+{
+    PublicDependencyModuleNames.AddRange(new string[]
+    {
+        "UnrealEd",
+        "EditorFramework",
+        "ToolMenus",
+        "EditorStyle",
+    });
+}
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
