@@ -54,7 +54,7 @@ protected:
 	class UInputAction* MouseLookAction;
 	
 public:
-	ADownDogCharacter();
+	ADownDogCharacter(const class FObjectInitializer& ObjectInitializer);
 
 protected:
 

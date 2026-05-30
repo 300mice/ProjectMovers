@@ -34,13 +34,7 @@ public class DownDog : ModuleRules
 		});
 
 		PublicIncludePaths.AddRange(new string[] {
-			"DownDog",
-			"DownDog/Variant_Horror",
-			"DownDog/Variant_Horror/UI",
-			"DownDog/Variant_Shooter",
-			"DownDog/Variant_Shooter/AI",
-			"DownDog/Variant_Shooter/UI",
-			"DownDog/Variant_Shooter/Weapons"
+			"DownDog"
 		});
 		if (Target.bBuildEditor)
 		{

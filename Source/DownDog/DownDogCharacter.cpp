@@ -10,8 +10,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DownDog.h"
 #include "AbilitySystem/AbilitySet.h"
+#include "Utils/DDCharacterMovementComponent.h"
 
-ADownDogCharacter::ADownDogCharacter()
+ADownDogCharacter::ADownDogCharacter(const class FObjectInitializer& ObjectInitializer) :
+	Super(
+		ObjectInitializer.SetDefaultSubobjectClass<UDDCharacterMovementComponent>(ACharacter::CharacterMovementComponentName)
+	)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -70,7 +74,6 @@ void ADownDogCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		UE_LOG(LogDownDog, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
-
 
 void ADownDogCharacter::MoveInput(const FInputActionValue& Value)
 {
