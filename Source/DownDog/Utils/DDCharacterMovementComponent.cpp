@@ -3,7 +3,17 @@
 
 #include "DDCharacterMovementComponent.h"
 
+#include "AbilitySystemComponent.h"
+#include  "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/Attributes/DownDogPlayerSet.h"
+
 float UDDCharacterMovementComponent::GetMaxSpeed() const
 {
-	return Super::GetMaxSpeed();
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
+	if (!ASC) return Super::GetMaxSpeed();
+
+	const UDownDogPlayerSet* PlayerAttributeSet = Cast<UDownDogPlayerSet>(ASC->GetAttributeSet(UDownDogPlayerSet::StaticClass()));
+	if (!PlayerAttributeSet) return Super::GetMaxSpeed();
+
+	return PlayerAttributeSet->GetMovementSpeed();
 }

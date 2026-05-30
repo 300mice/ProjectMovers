@@ -21,6 +21,7 @@ public:
 
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, Health);
 	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UDownDogPlayerSet, MovementSpeed);
 
 	// Delegate when health changes due to damage/healing, some information may be missing on the client
 	mutable FDownDogAttributeEvent OnHealthChanged;
@@ -31,12 +32,18 @@ public:
 	// Delegate to broadcast when the health attribute reaches zero
 	mutable FDownDogAttributeEvent OnOutOfHealth;
 
+	// Delegate when max health changes
+	mutable FDownDogAttributeEvent OnMovementSPeedChanged;
+
 protected:
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldValue);
 
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
+
+	UFUNCTION()
+	void OnRep_MovementSpeed(const FGameplayAttributeData& OldValue);
 
 	virtual bool PreGameplayEffectExecute(struct FGameplayEffectModCallbackData& Data) override;
 
@@ -52,8 +59,12 @@ private:
 	FGameplayAttributeData Health;
 
 	// The current max health attribute.  Max health is an attribute since gameplay effects can modify it.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Lyra|Health", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "DownDog|Health", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxHealth;
+
+	// The current movement speed attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MovementSpeed, Category = "DownDog|Movement", Meta = (AllowPrivateAccess = true))
+	FGameplayAttributeData MovementSpeed;
 
 	// Used to track when the health reaches 0.
 	bool bOutOfHealth;

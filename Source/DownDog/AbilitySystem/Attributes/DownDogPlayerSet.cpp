@@ -8,6 +8,7 @@
 UDownDogPlayerSet::UDownDogPlayerSet()
 	: Health(100.0f)
 	, MaxHealth(100.0f)
+	, MovementSpeed( 600.0f)
 {
 	bOutOfHealth = false;
 	MaxHealthBeforeAttributeChange = 0.0f;
@@ -20,6 +21,7 @@ void UDownDogPlayerSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UDownDogPlayerSet, MovementSpeed, COND_None, REPNOTIFY_Always);
 }
 
 void UDownDogPlayerSet::OnRep_Health(const FGameplayAttributeData& OldValue)
@@ -46,6 +48,11 @@ void UDownDogPlayerSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 void UDownDogPlayerSet::OnRep_MaxHealth(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, MaxHealth, OldValue);
+}
+
+void UDownDogPlayerSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldValue)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UDownDogPlayerSet, MovementSpeed, OldValue);
 }
 
 bool UDownDogPlayerSet::PreGameplayEffectExecute(FGameplayEffectModCallbackData& Data)
@@ -108,6 +115,10 @@ void UDownDogPlayerSet::ClampAttribute(const FGameplayAttribute& Attribute, floa
 	{
 		// Do not allow max health to drop below 1.
 		NewValue = FMath::Max(NewValue, 1.0f);
+	}
+	else if (Attribute == GetMovementSpeedAttribute())
+	{
+		NewValue = FMath::Max(NewValue, 0.0f);
 	}
 }
 
