@@ -76,6 +76,8 @@ protected: // Event handling
 	/** Event triggered when a gameplay tag is added or removed to the owner's ASC. Only for 'new' and 'removed' events) */
 	UFUNCTION(BlueprintImplementableEvent, Category = "GAS|UI", DisplayName="OnGameplayTagChange")
 	void K2_OnGameplayTagChange(FGameplayTag GameplayTag, int32 NewTagCount);
+
+	virtual void NativeDestruct() override;
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="GAS|UI")

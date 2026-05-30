@@ -102,3 +102,20 @@ void UGASWidget::OnGameplayTagChange(FGameplayTag GameplayTag, int32 NewTagCount
 {
 	K2_OnGameplayTagChange(GameplayTag, NewTagCount);
 }
+
+void UGASWidget::NativeDestruct()
+{
+	if (AbilitySystemComponent)
+	{
+		TArray<FGameplayAttribute> Attributes;
+		AbilitySystemComponent->GetAllAttributes(Attributes);
+		for (FGameplayAttribute Attribute : Attributes)
+		{
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attribute)
+				.RemoveAll(this);
+		}
+		ResetAbilitySystem();
+	}
+
+	Super::NativeDestruct();
+}
